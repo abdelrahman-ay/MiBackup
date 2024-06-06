@@ -9,16 +9,13 @@ if not exist %fastboot% echo - %fastboot% is not found. [Script is corrupted] Pu
 if not exist %adb% echo - /%adb% folder is not found. [Adb is not detected] Put all script files in the backup directory. & pause & exit /B 1
 echo - Waiting for device... (Install drivers to continue)
 cls
-echo - Restore Script V1.5
+echo - Restore Script V1.6
 echo - for MI & REDMI devices
 echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, Control Center data, Apps, Appdata
 echo - Creator: AYS
 echo.
 echo.
-@echo off
 setlocal EnableDelayedExpansion
-
-REM Function to display menu and get user input
 :select_backup_folder
 echo Available backup folders:
 set "i=0"
@@ -40,10 +37,8 @@ if "%choice%" geq "1" if "%choice%" leq "!i!" (
     echo Invalid choice. Please enter a number between 1 and !i!
     goto :select_backup_folder
 )
-
 :folder_selected
 echo Selected backup folder: %selected_folder%
-
 echo.
 echo.
 echo ##################################################################################
@@ -54,7 +49,6 @@ echo.
 echo.
 echo.
 echo.
-
 %adb% restore %selected_folder%/Settings/apps_%selected_folder%.ab || @echo "ERROR: apps restore failed" && pause
 echo.
 echo.
@@ -148,6 +142,7 @@ if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.xiaomi.discover
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.fmservice
 echo.
 echo Other System Data (Might Cause bugs and not work correctly procced with caution): 
+echo - RESTORE THE FOLLOWING FILES MANUALLY
 echo.
 echo - Do you want to restore Control Center settings ?
 echo - press 1 if yes
@@ -177,8 +172,8 @@ echo.
 set /p global=-- Type your option: (1/2) 
 if /i "%global%" equ "1" echo restoring global settings && %adb% shell settings put global %selected_folder%/Settings/global.1.2.txt
 echo.
-
-
+echo.
+echo.
 echo - Do you want to reboot system ?
 echo - press 1 if yes
 echo - press 2 if not

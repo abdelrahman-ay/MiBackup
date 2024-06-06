@@ -9,12 +9,31 @@ if not exist %fastboot% echo - %fastboot% is not found. [Script is corrupted] Pu
 if not exist %adb% echo - /%adb% folder is not found. [Adb is not detected] Put all script files in the backup directory. & pause & exit /B 1
 echo - Waiting for device... (Install drivers to continue)
 cls
-echo - Backup Script V1.5
-echo - for MI & REDMI devices
+echo - Backup Script V1.6
+echo - for MI and REDMI devices
 echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, sysuiplugin arrangement data, app, appdata
 echo - Creator: AYS
 echo.
 echo.
+setlocal EnableDelayedExpansion
+set "folder_name=backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"
+set "i=0"
+set "new_folder_name=%folder_name%"
+if exist "%folder_name%" (
+    :loop
+    set /a i+=1
+    set "new_folder_name=%folder_name%_!i!"
+    if exist "!new_folder_name!" (
+        goto :loop
+    ) else (
+        mkdir "!new_folder_name!"
+        echo Created folder: "!new_folder_name!"
+    )
+) else (
+    mkdir "%new_folder_name%"
+    echo Created folder: "%new_folder_name%"
+)
+set "backup_folder=%new_folder_name%"
 echo.
 echo.
 echo.
@@ -31,18 +50,18 @@ echo - Please wait. The device will reboot to bootloader when installation is fi
 echo ##################################################################################
 echo.
 echo.
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%
+mkdir %backup_folder%
 echo.
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/Whatsapp/"
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/Modules/"
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/Downloads/"
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/DCIM/"
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/Pictures/"
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/MIUIBackup/"
-mkdir backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%"/Settings/"
+mkdir %backup_folder%"/Whatsapp/"
+mkdir %backup_folder%"/Modules/"
+mkdir %backup_folder%"/Downloads/"
+mkdir %backup_folder%"/DCIM/"
+mkdir %backup_folder%"/Pictures/"
+mkdir %backup_folder%"/MIUIBackup/"
+mkdir %backup_folder%"/Settings/"
 echo.
 echo.
-%adb% backup -apk -nosystem -all -f backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Settings/apps_backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%.ab || @echo "ERROR: apps backup failed" && pause
+%adb% backup -apk -nosystem -all -f %backup_folder%/Settings/apps_%backup_folder%.ab || @echo "ERROR: apps backup failed" && pause
 echo.
 echo Whatsapp: 
 echo.
@@ -60,40 +79,40 @@ echo - Continuing with Backup
 echo.
 echo Make A Local Whatsapp data Backup 
 echo.
-%adb% pull /storage/emulated/0/Android/media/com.whatsapp/ "backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Whatsapp/" || @echo "ERROR: WHATSAPP data backup failed" && pause
+%adb% pull /storage/emulated/0/Android/media/com.whatsapp/ "%backup_folder%/Whatsapp/" || @echo "ERROR: WHATSAPP data backup failed" && pause
 echo.
 echo Modules: 
 echo.
 %adb% shell su -c cp -r -p /data/adb/modules/ /storage/emulated/0/TempBackupFilesModules/ && @echo. - step 1 Done. || @echo "ERROR: MODULES data backup failed" && pause
-%adb% pull /storage/emulated/0/TempBackupFilesModules/ "backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Modules/" && @echo. - step 2 Done. || @echo "ERROR: MODULES data backup failed" && pause
+%adb% pull /storage/emulated/0/TempBackupFilesModules/ "%backup_folder%/Modules/" && @echo. - step 2 Done. || @echo "ERROR: MODULES data backup failed" && pause
 echo CLEANING UP
 %adb% shell rm -r /storage/emulated/0/TempBackupFilesModules/ && @echo. - step 3 Done. || @echo "ERROR: MODULES data backup failed" && pause
 echo.
 echo Downloads: 
 echo.
-%adb% pull /storage/emulated/0/Download/ "backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Downloads" || @echo "ERROR: DOWNLOADS folder backup failed" && pause
+%adb% pull /storage/emulated/0/Download/ "%backup_folder%/Downloads" || @echo "ERROR: DOWNLOADS folder backup failed" && pause
 echo.
 echo Camera: 
 echo.
-%adb% pull /storage/emulated/0/DCIM/ "backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/DCIM/" || @echo "ERROR: DCIM folder backup failed" && pause
+%adb% pull /storage/emulated/0/DCIM/ "%backup_folder%/DCIM/" || @echo "ERROR: DCIM folder backup failed" && pause
 echo.
 echo Pictures: 
 echo.
-%adb% pull /storage/emulated/0/Pictures/ "backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Pictures/" || @echo "ERROR: PICTURES folder backup failed" && pause
+%adb% pull /storage/emulated/0/Pictures/ "%backup_folder%/Pictures/" || @echo "ERROR: PICTURES folder backup failed" && pause
 echo.
 echo MIUI Backup: 
 echo.
-%adb% pull /storage/emulated/0/MIUI/backup/AllBackup/ "backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%//MIUIBackup/" || @echo "ERROR: BACKUP folder backup failed" && pause
+%adb% pull /storage/emulated/0/MIUI/backup/AllBackup/ "%backup_folder%//MIUIBackup/" || @echo "ERROR: BACKUP folder backup failed" && pause
 echo.
 echo Other System Data: 
 echo.
-%adb% shell settings get secure sysui_qs_tiles > backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Settings/sysui_qs_tiles.txt || @echo "ERROR: sysui_qs_tiles backup failed" && pause
+%adb% shell settings get secure sysui_qs_tiles > %backup_folder%/Settings/sysui_qs_tiles.txt || @echo "ERROR: sysui_qs_tiles backup failed" && pause
 echo.
-%adb% shell settings list system > backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Settings/system.1.2.txt || @echo "ERROR: system settings backup failed" && pause
+%adb% shell settings list system > %backup_folder%/Settings/system.1.2.txt || @echo "ERROR: system settings backup failed" && pause
 echo.
-%adb% shell settings list secure > backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Settings/secure.1.2.txt || @echo "ERROR: secure settings backup failed" && pause
+%adb% shell settings list secure > %backup_folder%/Settings/secure.1.2.txt || @echo "ERROR: secure settings backup failed" && pause
 echo.
-%adb% shell settings list global > backup_%date:~-7,2%%date:~-10,2%%date:~-4,4%/Settings/global.1.2.txt || @echo "ERROR: global settings backup failed" && pause
+%adb% shell settings list global > %backup_folder%/Settings/global.1.2.txt || @echo "ERROR: global settings backup failed" && pause
 echo.
 echo - Backup finsihed
 echo. 
