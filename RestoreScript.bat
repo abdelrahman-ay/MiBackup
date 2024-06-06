@@ -10,7 +10,7 @@ if not exist %adb% echo - /%adb% folder is not found. [Adb is not detected] Put 
 echo - Waiting for device... (Install drivers to continue)
 cls
 echo - Restore Script V1.6
-echo - for MI & REDMI devices
+echo - for MI and REDMI devices
 echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, Control Center data, Apps, Appdata
 echo - Creator: AYS
 echo.
@@ -98,7 +98,6 @@ if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.videoplayer
 if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.soundrecorder
 if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.providers.downloads.ui
 if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.hotwordenrollment.xgoogle
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.nfc
 if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.stk
 if %BloatwareCheck% equ "1"  %adb% shell pm clear com.xiaomi.simactivate.service
 if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.cleaner
@@ -125,7 +124,6 @@ if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.videoplayer
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.soundrecorder
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.providers.downloads.ui
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.hotwordenrollment.xgoogle
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.nfc
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.stk
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.xiaomi.simactivate.service
 if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.cleaner
