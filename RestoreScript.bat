@@ -9,7 +9,7 @@ if not exist %fastboot% echo - %fastboot% is not found. [Script is corrupted] Pu
 if not exist %adb% echo - /%adb% folder is not found. [Adb is not detected] Put all script files in the backup directory. & pause & exit /B 1
 echo - Waiting for device... (Install drivers to continue)
 cls
-echo - Restore Script V1.6
+echo - Restore Script V1.7
 echo - for MI and REDMI devices
 echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, Control Center data, Apps, Appdata
 echo - Creator: AYS
@@ -58,8 +58,8 @@ echo.
 echo.
 echo Modules: 
 echo.
-%adb% push "%selected_folder%/Modules/modules/" /storage/emulated/0/modules/ || @echo "ERROR: MODULES data restore failed step 1"
-%adb% push /storage/emulated/0/modules/ /data/adb/ || @echo "ERROR: MODULES data restore failed step 2"
+%adb% push "%selected_folder%/Modules/TempBackupFilesModules/" /storage/emulated/0/modules/ || @echo "ERROR: MODULES data restore failed step 1"
+%adb% shell su -c cp -r -p /storage/emulated/0/modules/ /data/adb/ || @echo "ERROR: MODULES data restore failed step 2"
 echo.
 echo Downloads: 
 echo.
@@ -83,63 +83,64 @@ echo - press 2 if not
 echo.
 set /p BloatwareCheck=-- Type your option: (1/2)  
 echo.
-if %BloatwareCheck% equ "1"  echo - Removing bloatware ...
+if %BloatwareCheck% equ "2" goto :BloatwareSkip
+echo - Removing bloatware ...
 echo.
 echo.
+  echo clearing packages data
 echo.
-if %BloatwareCheck% equ "1"  echo clearing packages data
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.miui.screenrecorder
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.fmradio
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.google.android.googlequicksearchbox
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.miui.fm
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.google.android.apps.googleassistant
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.miui.videoplayer
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.soundrecorder
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.providers.downloads.ui
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.hotwordenrollment.xgoogle
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.stk
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.xiaomi.simactivate.service
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.miui.cleaner
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.printspooler
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.hotwordenrollment.okgoogle
+  if %BloatwareCheck% equ "1" %adb% shell pm clear de.telekom.tsc
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.bips
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.android.chrome
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.google.android.tts
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.miui.touchassistant
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.google.android.projection.gearhead
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.google.android.gms.location.history
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.xiaomi.discover
+  if %BloatwareCheck% equ "1" %adb% shell pm clear com.miui.fmservice
 echo.
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.screenrecorder
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.fmradio
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.google.android.googlequicksearchbox
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.fm
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.google.android.apps.googleassistant
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.videoplayer
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.soundrecorder
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.providers.downloads.ui
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.hotwordenrollment.xgoogle
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.stk
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.xiaomi.simactivate.service
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.cleaner
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.printspooler
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.hotwordenrollment.okgoogle
-if %BloatwareCheck% equ "1"  %adb% shell pm clear de.telekom.tsc
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.bips
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.android.chrome
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.google.android.tts
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.touchassistant
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.google.android.projection.gearhead
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.google.android.gms.location.history
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.xiaomi.discover
-if %BloatwareCheck% equ "1"  %adb% shell pm clear com.miui.fmservice
+  echo disabling packages.
 echo.
-if %BloatwareCheck% equ "1"  echo disabling packages.
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.miui.screenrecorder
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.fmradio
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.google.android.googlequicksearchbox
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.miui.fm
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.google.android.apps.googleassistant
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.miui.videoplayer
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.soundrecorder
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.providers.downloads.ui
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.hotwordenrollment.xgoogle
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.stk
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.xiaomi.simactivate.service
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.miui.cleaner
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.printspooler
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.hotwordenrollment.okgoogle
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user de.telekom.tsc
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.bips
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.android.chrome
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.google.android.tts
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.miui.touchassistant
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.google.android.projection.gearhead
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.google.android.gms.location.history
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.xiaomi.discover
+  if %BloatwareCheck% equ "1" %adb% shell pm disable-user com.miui.fmservice
 echo.
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.screenrecorder
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.fmradio
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.google.android.googlequicksearchbox
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.fm
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.google.android.apps.googleassistant
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.videoplayer
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.soundrecorder
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.providers.downloads.ui
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.hotwordenrollment.xgoogle
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.stk
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.xiaomi.simactivate.service
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.cleaner
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.printspooler
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.hotwordenrollment.okgoogle
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user de.telekom.tsc
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.bips
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.android.chrome
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.google.android.tts
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.touchassistant
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.google.android.projection.gearhead
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.google.android.gms.location.history
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.xiaomi.discover
-if %BloatwareCheck% equ "1"  %adb% shell pm disable-user com.miui.fmservice
-echo.
-echo Other System Data (Might Cause bugs and not work correctly procced with caution): 
+:BloatwareSkip
+echo Other System Data (Will Cause bugs and not work correctly procced with caution): 
 echo - RESTORE THE FOLLOWING FILES MANUALLY
 echo.
 echo - Do you want to restore Control Center settings ?

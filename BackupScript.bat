@@ -9,9 +9,9 @@ if not exist %fastboot% echo - %fastboot% is not found. [Script is corrupted] Pu
 if not exist %adb% echo - /%adb% folder is not found. [Adb is not detected] Put all script files in the backup directory. & pause & exit /B 1
 echo - Waiting for device... (Install drivers to continue)
 cls
-echo - Backup Script V1.6
+echo - Backup Script V1.7
 echo - for MI and REDMI devices
-echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, sysuiplugin arrangement data, app, appdata
+echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, Control Center data, Apps, Appdata
 echo - Creator: AYS
 echo.
 echo.
@@ -38,11 +38,11 @@ echo.
 echo.
 echo.
 echo.
-echo - do you have applock for whatsapp ? 
+echo - automate Whatsapp local data backup ? 
 echo - press 1 if yes
 echo - press 2 if not
 echo.
-set /p applockcheck=-- Type your option: (1/2)  
+set /p WspBck=-- Type your option: (1/2)  
 echo.
 echo.
 echo ##################################################################################
@@ -52,12 +52,6 @@ echo.
 echo.
 mkdir %backup_folder%
 echo.
-mkdir %backup_folder%"/Whatsapp/"
-mkdir %backup_folder%"/Modules/"
-mkdir %backup_folder%"/Downloads/"
-mkdir %backup_folder%"/DCIM/"
-mkdir %backup_folder%"/Pictures/"
-mkdir %backup_folder%"/MIUIBackup/"
 mkdir %backup_folder%"/Settings/"
 echo.
 echo.
@@ -65,44 +59,93 @@ echo.
 echo.
 echo Whatsapp: 
 echo.
-%adb% shell am force-stop com.whatsapp
+if %WspBck% equ "1" %adb% shell am force-stop com.whatsapp
 timeout /t 3 /nobreak >nul
-%adb% shell su -c am start -n com.whatsapp/.backup.google.SettingsGoogleDrive
-adb shell input keyevent 66
+if %WspBck% equ "1" %adb% shell su -c am start -n com.whatsapp/.backup.google.SettingsGoogleDrive
 echo.
-if %applockcheck% equ "2" adb shell input keyevent 66
-if %applockcheck% equ "1" echo Input your password and press Back up
+if %WspBck% equ "1" %adb% shell input keyevent 66
 echo.
-echo Press ENTER to continue when Whatsapp data backup finish  
+if %WspBck% equ "1" %adb% shell input keyevent 66
+echo.
+if %WspBck% equ "1" echo Press ENTER when Whatsapp data backup finish  
 timeout /t -1 >nul
 echo - Continuing with Backup
 echo.
 echo Make A Local Whatsapp data Backup 
 echo.
-%adb% pull /storage/emulated/0/Android/media/com.whatsapp/ "%backup_folder%/Whatsapp/" || @echo "ERROR: WHATSAPP data backup failed" && pause
+echo - Backup Whatsapp data ? 
+echo - press 1 if yes
+echo - press 2 if not
+echo.
+set /p Wsp=-- Type your option: (1/2)  
+echo.
+if %Wsp% equ "1" mkdir %backup_folder%"/Whatsapp/"
+echo.
+if %Wsp% equ "1" %adb% pull /storage/emulated/0/Android/media/com.whatsapp/ "%backup_folder%/Whatsapp/" || @echo "ERROR: WHATSAPP data backup failed" && pause
 echo.
 echo Modules: 
 echo.
-%adb% shell su -c cp -r -p /data/adb/modules/ /storage/emulated/0/TempBackupFilesModules/ && @echo. - step 1 Done. || @echo "ERROR: MODULES data backup failed" && pause
-%adb% pull /storage/emulated/0/TempBackupFilesModules/ "%backup_folder%/Modules/" && @echo. - step 2 Done. || @echo "ERROR: MODULES data backup failed" && pause
+echo - backup Modules data ? 
+echo - press 1 if yes
+echo - press 2 if not
+echo.
+set /p modules=-- Type your option: (1/2)  
+echo.
+if %modules% equ "1" mkdir %backup_folder%"/Modules/"
+echo.
+if %modules% equ "1" %adb% shell su -c cp -r -p /data/adb/modules/ /storage/emulated/0/TempBackupFilesModules/ && @echo. - step 1 Done. || @echo "ERROR: MODULES data backup failed" && pause
+echo.
+if %modules% equ "1" %adb% pull /storage/emulated/0/TempBackupFilesModules/ "%backup_folder%/Modules/" && @echo. - step 2 Done. || @echo "ERROR: MODULES data backup failed" && pause
 echo CLEANING UP
-%adb% shell rm -r /storage/emulated/0/TempBackupFilesModules/ && @echo. - step 3 Done. || @echo "ERROR: MODULES data backup failed" && pause
+if %modules% equ "1" %adb% shell rm -r /storage/emulated/0/TempBackupFilesModules/ && @echo. - step 3 Done. || @echo "ERROR: MODULES data backup failed" && pause
 echo.
 echo Downloads: 
 echo.
-%adb% pull /storage/emulated/0/Download/ "%backup_folder%/Downloads" || @echo "ERROR: DOWNLOADS folder backup failed" && pause
+echo - backup downloads data ? 
+echo - press 1 if yes
+echo - press 2 if not
+echo.
+set /p downloads=-- Type your option: (1/2)  
+echo.
+if %downloads% equ "1" mkdir %backup_folder%"/Downloads/"
+echo.
+if %downloads% equ "1" %adb% pull /storage/emulated/0/Download/ "%backup_folder%/Downloads" || @echo "ERROR: DOWNLOADS folder backup failed" && pause
 echo.
 echo Camera: 
 echo.
-%adb% pull /storage/emulated/0/DCIM/ "%backup_folder%/DCIM/" || @echo "ERROR: DCIM folder backup failed" && pause
+echo - backup Camera data ? 
+echo - press 1 if yes
+echo - press 2 if not
+echo.
+set /p cam=-- Type your option: (1/2)  
+echo.
+if %cam% equ "1" mkdir %backup_folder%"/DCIM/"
+echo.
+if %cam% equ "1" %adb% pull /storage/emulated/0/DCIM/ "%backup_folder%/DCIM/" || @echo "ERROR: DCIM folder backup failed" && pause
 echo.
 echo Pictures: 
 echo.
-%adb% pull /storage/emulated/0/Pictures/ "%backup_folder%/Pictures/" || @echo "ERROR: PICTURES folder backup failed" && pause
+echo - backup Pictures data ? 
+echo - press 1 if yes
+echo - press 2 if not
+echo.
+set /p pics=-- Type your option: (1/2)  
+echo.
+if %pics% equ "1" mkdir %backup_folder%"/Pictures/"
+echo.
+if %pics% equ "1" %adb% pull /storage/emulated/0/Pictures/ "%backup_folder%/Pictures/" || @echo "ERROR: PICTURES folder backup failed" && pause
 echo.
 echo MIUI Backup: 
 echo.
-%adb% pull /storage/emulated/0/MIUI/backup/AllBackup/ "%backup_folder%//MIUIBackup/" || @echo "ERROR: BACKUP folder backup failed" && pause
+echo - backup MIUI data ? 
+echo - press 1 if yes
+echo - press 2 if not
+echo.
+set /p midata=-- Type your option: (1/2)  
+echo.
+if %midata% equ "1" mkdir %backup_folder%"/MIUIBackup/"
+echo.
+if %midata% equ "1" %adb% pull /storage/emulated/0/MIUI/backup/AllBackup/ "%backup_folder%//MIUIBackup/" || @echo "ERROR: BACKUP folder backup failed" && pause
 echo.
 echo Other System Data: 
 echo.
