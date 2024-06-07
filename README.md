@@ -4,7 +4,8 @@ Windows Batchfile script to backup and restore MI and Redmi devices data with ad
 - option to automate whatsapp data local backup first 
 - Folder numbering system allowing multiple backups at the same time
 - backup folder choosing to allow restoring older backup
-- option to specify which folders to backup 
+- option to specify which folders to backup
+- added another script to backup everything automatically 
 - restore is automated for all backed up folders
 - option to safely remove bloatware apps by disabling apps instead of uninstalling
 - option to restart phone to bootloader after backup 
