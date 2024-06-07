@@ -7,7 +7,7 @@ Windows Batchfile script to backup and restore MI and Redmi devices data with ad
 - option to remove bloatware apps by disabling them instead of uninstalling them
 - option to restart phone to bootloader after backup 
 - option to restart phone to system after restore 
-- don't need external files to work (libraries added automatically)
+- don't need external files to work (adb and fastboot included)
 
 # Currently able to backup and restore:
 + Whatsapp backup folder
