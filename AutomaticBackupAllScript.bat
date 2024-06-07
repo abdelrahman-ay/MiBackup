@@ -9,7 +9,7 @@ if not exist %fastboot% echo - %fastboot% is not found. [Script is corrupted] Pu
 if not exist %adb% echo - /%adb% folder is not found. [Adb is not detected] Put all script files in the backup directory. & pause & exit /B 1
 echo - Waiting for device... (Install drivers to continue)
 cls
-echo - Backup Script V1.6
+echo - Backup Script V1.7
 echo - for MI and REDMI devices
 echo - WORKS ON : Whatsapp backup folder, Magisk Modules folder, DCIM folder, Pictures folder, Downloads folder, sysuiplugin arrangement data, app, appdata
 echo - Creator: AYS
